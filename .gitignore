@@ -1,0 +1,39 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# System files
+.DS_Store
+
+# Experiment outputs and large model artifacts
+outputs/
+models/
+checkpoints/
+*.pt
+*.pth
+*.bin
+*.safetensors
+*.npy
+*.npz
+*.log
+
+# Hugging Face cache
+.cache/
+hf_cache/
+
+# Full local MATH-500 cache
+data/math500_full.jsonl
+
+# Keep pilot data, prompts, and project files uploadable
+!data/math500_pilot_20.jsonl
+!data/math500_pilot_20_summary.csv
+!data/math500_pilot_20_readme.md
+!data/math500_pilot_20_prompts.jsonl
+!prompts/math_cot_prompt.txt
+!README.md
+!requirements.txt
