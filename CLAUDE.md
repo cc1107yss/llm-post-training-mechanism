@@ -1,6 +1,6 @@
 # CLAUDE.md — LLM Post-Training Mechanism Research
 
-本仓库是国创项目「可验证推理任务中大语言模型后训练的轨迹几何机制与因果验证研究」的**唯一代码库**。
+本仓库是「大语言模型后训练推理行为研究」项目的**唯一代码库**。
 原 `reasoning-geometry-pilot` 已合并进本仓库（见 `experiments/m1_math500_pilot/`）并下线。
 
 ## 目录约定
