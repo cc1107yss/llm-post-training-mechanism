@@ -14,13 +14,23 @@ env/
 outputs/
 models/
 checkpoints/
+runs/
+wandb/
 *.pt
 *.pth
 *.bin
 *.safetensors
+*.ckpt
+*.gguf
 *.npy
 *.npz
 *.log
+
+# Editors / scratch
+.idea/
+.vscode/
+*.tmp
+*.bak
 
 # Hugging Face cache
 .cache/

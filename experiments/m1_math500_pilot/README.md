@@ -1,59 +1,75 @@
-# Milestone 1 — MATH-500 Pilot
+# MATH-500 Pilot-20 Four-Stage Behavior Reproduction
 
-> 本目录是国创项目「可验证推理任务中大语言模型后训练的轨迹几何机制与因果验证研究」的
-> 里程碑 1。原独立仓库 `reasoning-geometry-pilot` 已合并至本仓库；脚本、数据、prompt
-> 现位于仓库根目录的 `scripts/`、`data/`、`prompts/`，复现命令见仓库根 `README.md`。
+> Milestone 1 of this project. Consolidated from the former standalone
+> `reasoning-geometry-pilot` repository. The pipeline scripts live in the
+> repository-level `scripts/`, input data in `data/`, and prompt templates in
+> `prompts/`; this folder holds the milestone notes and results.
 
-本里程碑为答辩前 pilot 实验材料，用于验证实验 pipeline 可行性。
+This folder records a small-scale pilot experiment for the project:
 
-## 当前进度
+**Trajectory Geometry and Causal Validation of Post-Training in Verifiable Reasoning Tasks**
 
-已完成：MATH-500 pilot data preparation。
+## Purpose
 
-## 当前产物
+This pilot is not a final benchmark result. Its purpose is to verify that the behavior-level experimental pipeline can run across four post-training stages:
 
-- `data/math500_pilot_20.jsonl`
-- `data/math500_pilot_20_summary.csv`
-- `data/math500_pilot_20_readme.md`
-- `data/math500_pilot_20_prompts.jsonl`
-- `prompts/math_cot_prompt.txt`
+Base → SFT → DPO → Final/RLVR
 
-## Pilot 子集分布
+The pipeline includes:
 
-Level 分布：
+1. loading stage-aligned checkpoints;
+2. running generation on a fixed MATH-500 pilot subset;
+3. extracting final answers automatically;
+4. manually reviewing uncertain cases;
+5. summarizing stage-level behavior metrics.
 
-- level 3: 6
-- level 4: 8
-- level 5: 6
+## Dataset
 
-Subject 分布：
+- Benchmark: MATH-500
+- Pilot subset size: 20 problems
+- Sampling: 1 generation per problem
+- Decoding: greedy decoding
+- max_new_tokens: 1024
 
-- Algebra: 4
-- Counting & Probability: 3
-- Geometry: 3
-- Intermediate Algebra: 3
-- Number Theory: 3
-- Prealgebra: 2
-- Precalculus: 2
+## Models
 
-该 pilot 子集只用于验证实验 pipeline 可行性，不用于报告最终结论。
+| Stage | Local checkpoint |
+|---|---|
+| Base | models/Meta-Llama-3.1-8B |
+| SFT | models/Llama-3.1-Tulu-3-8B-SFT |
+| DPO | models/Llama-3.1-Tulu-3-8B-DPO |
+| Final/RLVR | models/Llama-3.1-Tulu-3-8B |
 
-## 复现命令
+Model weights are not included in this repository.
+
+## Results
+
+Four-stage behavior summary (after manual review):
+
+| Stage | Auto acc. | Final acc. | Avg. tokens |
+|---|---|---|---|
+| Base | 20% | 25% | 709.45 |
+| SFT | 15% | 20% | 616.00 |
+| DPO | 15% | 20% | 670.20 |
+| Final/RLVR | 25% | 35% | 819.65 |
+
+- Per-stage tables: `tables/*_manual_corrected_summary.csv`
+- Aggregate table: `tables/math500_pilot20_base_sft_dpo_final_behavior_summary.csv`
+- PPT-ready table & figure: `tables/*_for_ppt_clear_table.{html,md}`, `figures/*.svg`
+
+## Reproduce
+
+Pipeline scripts (repository root `scripts/`):
 
 ```bash
-pip install -r requirements.txt
-python3 scripts/inspect_math500.py
-python3 scripts/select_math500_pilot.py
-python3 scripts/build_math500_prompts.py
-python3 scripts/validate_math500_pilot.py
+python3 scripts/generate_math.py          # stage-aligned generation
+python3 scripts/extract_math_answer.py     # automatic answer extraction
+python3 scripts/summarize_generations.py   # stage-level behavior summary
 ```
 
-## 下一步计划
+Raw generation outputs (`outputs/`) and model weights (`models/`) are
+intentionally git-ignored; see `RUNBOOK.md` for the GPU stage.
 
-- generation script
-- answer extraction
-- behavior summary
-- hidden states extraction
-- linear probe
-- ∆logp analysis
-- optional activation patching
+## Important Note
+
+The MATH-500 pilot-20 results are small-scale feasibility results and should not be interpreted as final benchmark numbers.
